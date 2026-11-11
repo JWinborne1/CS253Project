@@ -3,9 +3,9 @@ public interface Stack<E> {
 
     public E pop();
 
-    public boolean isEmpty();
+    public E peek();
 
-    public boolean isFull();
+    public boolean isEmpty();
 
     public int getSize();
 }

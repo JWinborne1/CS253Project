@@ -1,11 +1,10 @@
 public interface Queue<E> {
-    public void enqueue();
+    public void enqueue(E val);
 
     public E dequeue();
 
+    public E peek();
+
     public boolean isEmpty();
 
-    public boolean isFull();
-
-    public int getSize();
 }

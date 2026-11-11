@@ -17,11 +17,12 @@ public class ATLAS{
         System.out.println("Hello, " + name + "!");
 
 
+
+
         scanner.close();
-        
     }
 
     private static void reset(){
-        
+        // TO BE IMPLEMENTED
     }
 }
