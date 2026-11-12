@@ -50,7 +50,13 @@ public class LinkedList<E> {
         if(head == null) throw new RuntimeException("Empty!");  // Empty check
         E val = head.data;                                      // Save head data
         head = head.next;                                       // Remove front of list
-        return val;                                                     
+
+        if(head == null) {
+            tail = null;
+        } else if (head.next == null) {
+            tail = head;
+        }
+        return val;
     }
 
     /*
@@ -70,7 +76,7 @@ public class LinkedList<E> {
         if(head == null) return 0;
         int size = 0;
         Node<E> curr = head;
-        while(curr.next != null){      // Move through list until tail and count nodes
+        while(curr != null){      // Move through list until tail and count nodes
             size++;
             curr = curr.next;
         }

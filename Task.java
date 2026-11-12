@@ -5,7 +5,7 @@ public class Task {
     private int priority;
     private boolean isCompleted;
     private int estimatedTime; // in minutes
-
+    
     
 
 public Task(int taskID, String taskName, int dueDate, int priority, boolean isCompleted, int estimatedTime) {
