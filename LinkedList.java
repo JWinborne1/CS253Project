@@ -1,4 +1,6 @@
-public class LinkedList<E> {
+
+
+public class LinkedList<E>{
     Node<E> head = null;
     Node<E> tail = null;
 

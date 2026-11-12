@@ -11,12 +11,14 @@ public class ATLAS{
     private static void startUpSequence() {
         System.out.println("Starting up A.T.L.A.S...");
         Scanner scanner = new Scanner(System.in);
-
+        Task task = new Task("Hi", "20261201");
+        System.out.println(task.getTimeLeft());
         System.out.println("Enter your name: "); // Later store this in memory for repeat visits
         String name = scanner.nextLine();
         System.out.println("Hello, " + name + " How may I assist a wonderful person like you today!");
 
         int choice = ATLASMenu(scanner);
+
 
         switch (choice) {
             case 1:
