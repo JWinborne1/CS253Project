@@ -5,6 +5,7 @@ public class Task {
     private int priority;
     private boolean isCompleted;
     private int estimatedTime; // in minutes
+    LinkedList<Task> taskList = new LinkedList<>();
 
     
 
