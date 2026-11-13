@@ -5,7 +5,11 @@ public class Task {
     private int priority;
     private boolean isCompleted;
     private int estimatedTime; // in minutes
+
     
+
+    LinkedList<Task> taskList = new LinkedList<>();
+
     
 
 public Task(int taskID, String taskName, int dueDate, int priority, boolean isCompleted, int estimatedTime) {
