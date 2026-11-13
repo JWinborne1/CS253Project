@@ -1,3 +1,4 @@
+import java.lang.reflect.Method;
 import java.util.Scanner;
 
 public class ATLAS{
@@ -49,7 +50,7 @@ public class ATLAS{
                     if (isCompleted) {
                         System.out.println("Status: Complete and removed from queue. Congrats, makes us proud!");
                     } else {
-                        System.out.println("Status: pending. Task left on read. It'll be waiting right here when your done pretendign you don't have a midterm tomorrow. ");
+                        System.out.println("Status: pending. Task left on read. It'll be waiting right here when your done pretending you don't have a midterm tomorrow. ");
                     }
                     System.out.print("Enter estimated time (in minutes): ");
                     int estimatedTime = scanner.nextInt();
@@ -59,13 +60,15 @@ public class ATLAS{
                     break;
                 case 2:
                     System.out.println("2. View Top Recommended Tasks");
-                    System.out.println("Top Recommended Tasks:");
+                    listTopRecommendedTasks();
                     break;
                 case 3:
                     System.out.println("3. View All Tasks");
+                    listAllTasks();
                     break;
                 case 4:
                     System.out.println("4. View Completed Tasks");
+                    listCompletedTasks();
                     break;
                 case 5:
                     System.out.println("5. Reset A.T.L.A.S");
@@ -80,13 +83,7 @@ public class ATLAS{
 
         scanner.close();
        
-            
-        
-        
-        
-    
-            
-    }
+        }
 
    
 
@@ -94,4 +91,46 @@ public class ATLAS{
         System.out.println("Resetting A.T.L.A.S...");
         // TO BE IMPLEMENTED
     }
+
+    private static void listTopRecommendedTasks() {
+        if (taskList.isEmpty()) {
+            System.out.println("No recommended tasks available.");
+            return;
+        }
+
+        orderTasksByPriority();
+        System.out.println("Top Recommended Tasks:");
+        int limit = Math.min(3, taskList.getSize());
+        for (int i = 0; i < limit; i++) {
+            Task task = getTaskAtIndex(i);
+            System.out.println("Task ID: " + task.getTaskID() + ", Name: " + task.getTaskName());
+        }
+    }
+
+    private static void orderTasksByPriority() {
+        // TO BE IMPLEMENTED
+    }
+
+    
+        
+    
+    
+    private static void listAllTasks() {
+        if (taskList.isEmpty()) {
+            System.out.println("No tasks available.");
+        } else {
+            System.out.println("All Tasks:");
+            for (int i = 0; i < taskList.getSize(); i++) {
+                Task task = taskList.get(i);
+                System.out.println("Task ID: " + task.getTaskID() + ", Name: " + task.getTaskName());
+            }
+        }
+    }
+private static void listCompletedTasks() {
+    if (taskList.isEmpty()) {
+        System.out.println("No completed tasks available.");
+    }
+}
+    
+    
 }
