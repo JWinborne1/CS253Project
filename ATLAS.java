@@ -1,3 +1,4 @@
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Scanner;
 
@@ -5,8 +6,7 @@ public class ATLAS{
     
     private static LinkedList<Task> taskList = new LinkedList<>();
     public static void main(String[] args) {
-       taskList.addBack(new Task(1, "Finish CS253 Project", 20240615, 1, false, 120));
-       taskList.addBack(new Task(2, "Prepare for CS253 Exam", 20240620, 2, false, 180));
+  
         
        startUpSequence();
        
@@ -18,24 +18,15 @@ public class ATLAS{
     private static void startUpSequence() {
         System.out.println("Starting up A.T.L.A.S...");
         Scanner scanner = new Scanner(System.in);
-
+        Task task = new Task("Hi", "20261201");
+        System.out.println(task.getTimeLeft());
         System.out.println("Enter your name: "); // Later store this in memory for repeat visits
         String name = scanner.nextLine();
         System.out.println("Hello, " + name + " How may I assist a wonderful person like you today!");
 
-        int choice = 0;
-        
+        int choice;
         do {
-            System.out.println("Menu:");
-            System.out.println("1. Add New Task");
-            System.out.println("2. View Top Recommended Tasks");
-            System.out.println("3. View All Tasks");
-            System.out.println("4. View Completed Tasks");
-            System.out.println("5. Reset A.T.L.A.S");
-            System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
-            scanner.nextLine();
-
+            choice = ATLASMenu(scanner);
             switch (choice) {
                 case 1:
                     System.out.println("1. Add New Task");
@@ -54,7 +45,7 @@ public class ATLAS{
                     }
                     System.out.print("Enter estimated time (in minutes): ");
                     int estimatedTime = scanner.nextInt();
-                    Task newTask = new Task(taskList.getSize() + 1, taskName, dueDate, priority, isCompleted, estimatedTime);
+                    Task newTask = createTask(taskList.getSize() + 1, taskName, dueDate, priority, isCompleted, estimatedTime);
                     taskList.addBack(newTask);
                     System.out.println("Task added successfully!");
                     break;
@@ -92,6 +83,34 @@ public class ATLAS{
         // TO BE IMPLEMENTED
     }
 
+    private static int ATLASMenu(Scanner scanner) {
+        System.out.println("\nA.T.L.A.S. Menu");
+        System.out.println("1. Add New Task");
+        System.out.println("2. View Top Recommended Tasks");
+        System.out.println("3. View All Tasks");
+        System.out.println("4. View Completed Tasks");
+        System.out.println("5. Reset A.T.L.A.S");
+        System.out.print("Choose an option: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        return choice;
+    }
+
+    private static Task createTask(int taskID, String taskName, int dueDate, int priority, boolean isCompleted, int estimatedTime) {
+        try {
+            return Task.class.getDeclaredConstructor(int.class, String.class, int.class, int.class, boolean.class, int.class)
+                    .newInstance(taskID, taskName, dueDate, priority, isCompleted, estimatedTime);
+        } catch (Exception e) {
+            try {
+                return Task.class.getDeclaredConstructor(String.class, String.class)
+                        .newInstance(taskName, String.valueOf(dueDate));
+            } catch (Exception ignored) {
+                System.out.println("Unable to create Task with the expected constructor. Falling back to a basic task instance.");
+                return new Task(taskName, String.valueOf(dueDate));
+            }
+        }
+    }
+
     private static void listTopRecommendedTasks() {
         if (taskList.isEmpty()) {
             System.out.println("No recommended tasks available.");
@@ -111,17 +130,45 @@ public class ATLAS{
         // TO BE IMPLEMENTED
     }
 
-    
-        
-    
-    
+    private static Task getTaskAtIndex(int index) {
+        if (index < 0 || index >= taskList.getSize()) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + taskList.getSize());
+        }
+
+        try {
+            Object head = LinkedList.class.getDeclaredField("head").get(taskList);
+            Object current = head;
+            int currentIndex = 0;
+
+            while (current != null && currentIndex < index) {
+                current = current.getClass().getDeclaredField("next").get(current);
+                currentIndex++;
+            }
+
+            if (current == null) {
+                throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + taskList.getSize());
+            }
+
+            Field dataField = current.getClass().getDeclaredField("data");
+            dataField.setAccessible(true);
+            return (Task) dataField.get(current);
+        } catch (Exception e) {
+            try {
+                Method getter = taskList.getClass().getMethod("get", int.class);
+                return (Task) getter.invoke(taskList, index);
+            } catch (Exception ignored) {
+                throw new IllegalStateException("Unable to access task at index " + index + ".", e);
+            }
+        }
+    }
+
     private static void listAllTasks() {
         if (taskList.isEmpty()) {
             System.out.println("No tasks available.");
         } else {
             System.out.println("All Tasks:");
             for (int i = 0; i < taskList.getSize(); i++) {
-                Task task = taskList.get(i);
+                Task task = getTaskAtIndex(i);
                 System.out.println("Task ID: " + task.getTaskID() + ", Name: " + task.getTaskName());
             }
         }
