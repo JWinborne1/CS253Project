@@ -8,7 +8,7 @@ public class Task implements Comparable<Task> {
     private String dueDate; // Format: YYYYMMDD
     private int priority;
     private boolean isCompleted;
-    private int estimatedTime; // in minutes
+    private long timeLeft; // in minutes
     LinkedList<Task> taskList = new LinkedList<>();
     DateTimeFormatter format = DateTimeFormatter.BASIC_ISO_DATE;
     
