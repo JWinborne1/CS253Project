@@ -1,6 +1,16 @@
 
 
 public class LinkedList<E>{
+
+    private static class Node<E> {
+        private Node<E> next;
+        private E data;
+
+            public Node(E data){
+                this.data = data;
+            }
+    }
+
     Node<E> head = null;
     Node<E> tail = null;
 
@@ -103,12 +113,5 @@ public class LinkedList<E>{
         return head.data;                  // No tail means only 1 node, return value at head
     }
     
-    private class Node<T> {
-        private Node<T> next;
-        private T data;
-
-            public Node(T data){
-                this.data = data;
-            }
-    }
+    
 }

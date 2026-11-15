@@ -1,7 +1,7 @@
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Scanner;
-
+@SuppressWarnings("unused")
 public class ATLAS{
     
     private static LinkedList<Task> taskList = new LinkedList<>();
@@ -18,11 +18,9 @@ public class ATLAS{
     private static void startUpSequence() {
         System.out.println("Starting up A.T.L.A.S...");
         Scanner scanner = new Scanner(System.in);
-        Task task = new Task("Hi", "20261201");
-        System.out.println(task.getTimeLeft());
         System.out.println("Enter your name: "); // Later store this in memory for repeat visits
         String name = scanner.nextLine();
-        System.out.println("Hello, " + name + " How may I assist a wonderful person like you today!");
+        System.out.println("Hello " + name + ", How may I assist a wonderful person like you today!");
 
         int choice;
         do {
@@ -33,19 +31,14 @@ public class ATLAS{
                     System.out.print("Enter task name: ");
                     String taskName = scanner.nextLine();
                     System.out.print("Enter due date (YYYYMMDD): ");
-                    int dueDate = scanner.nextInt();
+                    String dueDate = scanner.next();
                     System.out.print("Enter priority (1-5): ");
                     int priority = scanner.nextInt();
-                    System.out.print("Is the task completed? (true/false): ");
-                    boolean isCompleted = scanner.nextBoolean();
-                    if (isCompleted) {
-                        System.out.println("Status: Complete and removed from queue. Congrats, makes us proud!");
-                    } else {
-                        System.out.println("Status: pending. Task left on read. It'll be waiting right here when your done pretending you don't have a midterm tomorrow. ");
-                    }
+                
+    
                     System.out.print("Enter estimated time (in minutes): ");
                     int estimatedTime = scanner.nextInt();
-                    Task newTask = createTask(taskList.getSize() + 1, taskName, dueDate, priority, isCompleted, estimatedTime);
+                    Task newTask = createTask(taskName, dueDate, priority);
                     taskList.addBack(newTask);
                     System.out.println("Task added successfully!");
                     break;
@@ -95,20 +88,16 @@ public class ATLAS{
         scanner.nextLine();
         return choice;
     }
+    // Uses simple constructor to create task
+    private static Task createTask(String taskName, String dueDate, int priority) {
+        Task T = new Task(taskList.getSize() + 1, taskName, dueDate, priority);
+        return T;
+    }
 
-    private static Task createTask(int taskID, String taskName, int dueDate, int priority, boolean isCompleted, int estimatedTime) {
-        try {
-            return Task.class.getDeclaredConstructor(int.class, String.class, int.class, int.class, boolean.class, int.class)
-                    .newInstance(taskID, taskName, dueDate, priority, isCompleted, estimatedTime);
-        } catch (Exception e) {
-            try {
-                return Task.class.getDeclaredConstructor(String.class, String.class)
-                        .newInstance(taskName, String.valueOf(dueDate));
-            } catch (Exception ignored) {
-                System.out.println("Unable to create Task with the expected constructor. Falling back to a basic task instance.");
-                return new Task(taskName, String.valueOf(dueDate));
-            }
-        }
+    
+    private static Task customTask(int taskID, String taskName, String dueDate, int priority, boolean isCompleted, long timeLeft){
+        Task T = new Task(taskID, taskName, dueDate, priority, isCompleted, timeLeft);
+        return T;
     }
 
     private static void listTopRecommendedTasks() {
