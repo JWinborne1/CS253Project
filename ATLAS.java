@@ -49,6 +49,8 @@ public class ATLAS{
                 case 3:
                     System.out.println("3. View All Tasks");
                     listAllTasks();
+                    filter(scanner);
+
                     break;
                 case 4:
                     System.out.println("4. View Completed Tasks");
@@ -74,6 +76,19 @@ public class ATLAS{
     private static void reset() {
         System.out.println("Resetting A.T.L.A.S...");
         // TO BE IMPLEMENTED
+    }
+
+    private static int filter(Scanner scanner){
+        System.out.println("1. By ID (Default)");
+        System.out.println("2. By Name");
+        System.out.println("3. By Due Date");
+        System.out.println("4. By Priority");
+        System.out.println("5. By Completed");
+        System.out.println("6. By Time Left");
+        System.out.print("Choose a filter: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        return choice;
     }
 
     private static int ATLASMenu(Scanner scanner) {
