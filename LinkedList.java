@@ -1,15 +1,7 @@
 
-
 public class LinkedList<E>{
 
-    private static class Node<E> {
-        private Node<E> next;
-        private E data;
-
-            public Node(E data){
-                this.data = data;
-            }
-    }
+    
 
     Node<E> head = null;
     Node<E> tail = null;
@@ -94,6 +86,7 @@ public class LinkedList<E>{
         }
         return size;
     }
+
 
     /*
         Gives the first value in the list

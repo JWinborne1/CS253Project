@@ -2,9 +2,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-public class Task implements Comparable<Task> {
-    private int taskID;
-    private String taskName;
+public class Task {
+    private int ID;
+    private String name;
     private String dueDate; // Format: YYYYMMDD
     private int priority;
     private boolean isCompleted;
@@ -14,8 +14,8 @@ public class Task implements Comparable<Task> {
     
 // Main constructor with explicit parameters
 public Task(int taskID, String taskName, String dueDate, int priority, boolean isCompleted, long timeLeft){
-    this.taskID = taskID;
-    this.taskName = taskName;
+    this.ID = taskID;
+    this.name = taskName;
     this.dueDate = dueDate;
     this.priority = priority;
     this.isCompleted = isCompleted;
@@ -24,19 +24,19 @@ public Task(int taskID, String taskName, String dueDate, int priority, boolean i
 
 // Simplified constructor that only takes four paraneters and assumes the other fields
 public Task(int taskID, String taskName, String dueDate, int priority) {
-    this.taskID = getTaskID();
-    this.taskName = taskName;
+    this.ID = getID();
+    this.name = taskName;
     this.dueDate = dueDate;
     this.priority = priority;
     this.isCompleted = false;
     this.timeLeft = getTimeLeft();
 }
     
-    public int getTaskID() {
-        return taskID;
+    public int getID() {
+        return ID;
         }
-    public String getTaskName() {
-        return taskName;
+    public String getName() {
+        return name;
         
     }
     public String getDueDate() {
@@ -58,16 +58,28 @@ public Task(int taskID, String taskName, String dueDate, int priority) {
         return timeLeft;
     }
 
-    /*
-        Priority is ranked 1 being the highest priority and numbers after are lower
-        @return 0: This task has higher priority; -1: Argument Task has higher priority; 1: They have equal priority
-     */
-    @Override
-    public int compareTo(Task t) {
-        if(this.priority > t.priority) return 0;
-        if(this.priority < t.priority) return -1;
-        return 1;
+    public void setID(int id){
+        ID = id;
     }
+
+    public void setIsCompleted(boolean c){
+        isCompleted = c;
+    }
+
+    public String toString(){
+        String 
+        taskDesc  = "ID: " + ID;
+        taskDesc += "\nTask: " + name;
+        taskDesc += "\nDue: " + dueDate;
+        taskDesc += "\nPriority: " + priority;
+        taskDesc += "\nTime Left: " + timeLeft + " days";
+        return taskDesc;
+
+    }
+
+
+
+    
 
   
     

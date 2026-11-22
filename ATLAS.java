@@ -1,6 +1,9 @@
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Scanner;
+import java.util.Comparator;
+import java.time.Year;
+import java.time.LocalDate;
 @SuppressWarnings("unused")
 public class ATLAS{
     
@@ -30,17 +33,21 @@ public class ATLAS{
                     System.out.println("1. Add New Task");
                     System.out.print("Enter task name: ");
                     String taskName = scanner.nextLine();
-                    System.out.print("Enter due date (YYYYMMDD): ");
-                    String dueDate = scanner.next();
+                    String dueDate = "";
+                    do{
+                        System.out.print("Enter due date (YYYYMMDD): ");
+                        dueDate = scanner.next();    
+                        if(!checkValidDate(dueDate)) System.out.println("Invlaid Date...\n");
+                    }while(!checkValidDate(dueDate));
+                    
                     System.out.print("Enter priority (1-5): ");
                     int priority = scanner.nextInt();
                 
     
-                    System.out.print("Enter estimated time (in minutes): ");
-                    int estimatedTime = scanner.nextInt();
                     Task newTask = createTask(taskName, dueDate, priority);
                     taskList.addBack(newTask);
-                    System.out.println("Task added successfully!");
+                    System.out.println("Task added successfully!\n" + newTask.toString());
+                    
                     break;
                 case 2:
                     System.out.println("2. View Top Recommended Tasks");
@@ -49,7 +56,10 @@ public class ATLAS{
                 case 3:
                     System.out.println("3. View All Tasks");
                     listAllTasks();
-                    filter(scanner);
+                    choice = filter(scanner);
+                    if(choice != 7){
+                        System.out.println("Filtering...");
+                    }
 
                     break;
                 case 4:
@@ -57,7 +67,7 @@ public class ATLAS{
                     listCompletedTasks();
                     break;
                 case 5:
-                    System.out.println("5. Reset A.T.L.A.S");
+                    System.out.println("0. Quit and Reset A.T.L.A.S");
                     reset();
                     break;
                 default:
@@ -65,7 +75,7 @@ public class ATLAS{
                     break;
             }
             System.out.println();
-        } while (choice != 5);
+        } while (choice != 0);
 
         scanner.close();
        
@@ -85,6 +95,8 @@ public class ATLAS{
         System.out.println("4. By Priority");
         System.out.println("5. By Completed");
         System.out.println("6. By Time Left");
+        System.out.println("7. Return");
+        System.out.println("0. Quit");
         System.out.print("Choose a filter: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
@@ -106,6 +118,7 @@ public class ATLAS{
     // Uses simple constructor to create task
     private static Task createTask(String taskName, String dueDate, int priority) {
         Task T = new Task(taskList.getSize() + 1, taskName, dueDate, priority);
+        T.setID(taskList.getSize() + 1);
         return T;
     }
 
@@ -126,12 +139,13 @@ public class ATLAS{
         int limit = Math.min(3, taskList.getSize());
         for (int i = 0; i < limit; i++) {
             Task task = getTaskAtIndex(i);
-            System.out.println("Task ID: " + task.getTaskID() + ", Name: " + task.getTaskName());
+            System.out.println("Task ID: " + task.getID() + ", Name: " + task.getName());
         }
     }
 
     private static void orderTasksByPriority() {
-        // TO BE IMPLEMENTED
+        MergeSort<Task> m = new MergeSort<>();
+        taskList.head = m.sort(taskList.head, Comparator.comparing(Task::getPriority));
     }
 
     private static Task getTaskAtIndex(int index) {
@@ -173,7 +187,7 @@ public class ATLAS{
             System.out.println("All Tasks:");
             for (int i = 0; i < taskList.getSize(); i++) {
                 Task task = getTaskAtIndex(i);
-                System.out.println("Task ID: " + task.getTaskID() + ", Name: " + task.getTaskName());
+                System.out.println("Task ID: " + task.getID() + ", Name: " + task.getName());
             }
         }
     }
@@ -182,6 +196,38 @@ private static void listCompletedTasks() {
         System.out.println("No completed tasks available.");
     }
 }
+
+private static boolean checkValidDate(String date){
+
+    if (date == null || date.length() != 8) return false;
+    for (int i = 0; i < 8; i++) {
+        char c = date.charAt(i);
+        if (c < '0' || c > '9') return false;
+    }
+
+    int year  = Integer.parseInt(date.substring(0, 4));
+    int month = Integer.parseInt(date.substring(4, 6));
+    int day   = Integer.parseInt(date.substring(6, 8));
+
+    if (month < 1 || month > 12 || day < 1) return false;
+
+    int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int maxDay = daysInMonth[month - 1];
+    boolean leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+    if (month == 2 && leap) maxDay = 29;
+
+    if (day > maxDay) return false;
+
+    LocalDate today = LocalDate.now();
+    int todayNum = today.getYear() * 10000
+                 + today.getMonthValue() * 100
+                 + today.getDayOfMonth();
+
+    return Integer.parseInt(date) >= todayNum;
+
+}
+
+
     
     
 }

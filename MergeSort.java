@@ -1,32 +1,27 @@
-public class MergeSort<E extends Comparable<E>> {
+import java.util.Comparator;
 
-    private static class Node<E> {
-        private Node<E> next;
-        private E data;
-
-        public Node(E data){
-                this.data = data;
-            }
-    }
+public class MergeSort<E> {
 
     /*
         Sorting function that divides a list into partitions then merges them in sorted order
         @param head Head node of the list
         @return merge The merger between split partitions
      */
-    public Node<E> sort(Node<E> head){
-        if(head == null || head.next == null) return head; // Base
+    public Node<E> sort(Node<E> head, Comparator<? super E> comp){
+        return head = mergeSort(head, comp);
 
-        // Find mid node
+    }
+
+    private Node<E> mergeSort(Node<E> head, Comparator<? super E> comp){
+        if (head == null || head.next == null) return head;
+
         Node<E> mid = getMid(head);
-        
-        // Recurse on each half
-        Node<E> left = sort(head);
-        Node<E> right = sort(mid.next);
+        Node<E> rightHalf = mid.next;
+        mid.next = null;
 
-        // Merge sorted halves
-        return merge(left, right);
-
+        Node<E> left = mergeSort(head, comp);
+        Node<E> right = mergeSort(rightHalf, comp);
+        return merge(left, right, comp);
     }
 
     /*
@@ -34,13 +29,13 @@ public class MergeSort<E extends Comparable<E>> {
         @param left Node<E> start of left partition; right Node<E> start of right partition
         @return temp.next Head of the new linked list
      */
-    private Node<E> merge(Node<E> left, Node<E> right){
+    private Node<E> merge(Node<E> left, Node<E> right, Comparator<? super E> comp){
         Node<E> temp = new Node<>(null);
         Node<E> tail = temp;
 
         // Add left and right onto tail
         while(left != null && right != null){
-            if(left.data.compareTo(right.data) < 0){ // compareTo return -1 when left is smaller than right, 0 when right > left
+            if(comp.compare(left.data, right.data) <= 0){ // compareTo return -1 when left is smaller than right, 0 when right > left
                 tail.next = left;
                 left = left.next;
             }else{
