@@ -62,12 +62,12 @@ public class MergeSort<E> {
         @return B middle node
      */
     private Node<E> getMid(Node<E> head){
-        if(head == null) return head;
+        if(head == null || head.next == null) return head;
 
         Node<E> A = head;
-        Node<E> B = head.next;
+        Node<E> B = head;
 
-        while(A != null && A.next != null){
+        while(A.next != null && A.next.next != null){
             B = B.next;
             A = A.next.next;
         }

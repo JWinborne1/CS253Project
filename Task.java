@@ -68,11 +68,12 @@ public Task(int taskID, String taskName, String dueDate, int priority) {
 
     public String toString(){
         String 
-        taskDesc  = "ID: " + ID;
+        taskDesc  = "\nID: " + ID;
         taskDesc += "\nTask: " + name;
         taskDesc += "\nDue: " + dueDate;
         taskDesc += "\nPriority: " + priority;
         taskDesc += "\nTime Left: " + timeLeft + " days";
+        taskDesc += "\nComplete: " + isCompleted;
         return taskDesc;
 
     }
