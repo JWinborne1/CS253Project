@@ -1,6 +1,8 @@
 
-
 public class LinkedList<E>{
+
+    
+
     Node<E> head = null;
     Node<E> tail = null;
 
@@ -85,6 +87,7 @@ public class LinkedList<E>{
         return size;
     }
 
+
     /*
         Gives the first value in the list
         @return Object type E
@@ -103,12 +106,5 @@ public class LinkedList<E>{
         return head.data;                  // No tail means only 1 node, return value at head
     }
     
-    private class Node<T> {
-        private Node<T> next;
-        private T data;
-
-            public Node(T data){
-                this.data = data;
-            }
-    }
+    
 }
